@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:file_saver/file_saver.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -85,7 +84,23 @@ class ImageConverterController extends GetxController {
   }
 
   Future<void> shareImage() async {
-    if (convertedImage.value == null) return;
-    Share.shareXFiles([XFile(convertedImage.value!.path)]);
+    try {
+      if (convertedImage.value == null) return;
+      Share.shareXFiles([XFile(convertedImage.value!.path)]);
+    } catch (e) {
+      return;
+    }
+  }
+
+  Future<void> saveImageToAppDirectory(File image) async {
+    if (image == null) return;
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final newPath = p.join(
+        dir.path,
+        "saved_image_${DateTime.now().millisecondsSinceEpoch}${p.extension(image.path)}",
+      );
+      final savedFile = await image.copy(newPath);
+    } catch (e) {}
   }
 }

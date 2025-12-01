@@ -58,6 +58,15 @@ class ImageConverterScreen extends StatelessWidget {
                     : null,
                 child: Text("Share"),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  if (con.convertedImage.value != null) {
+                   con. saveImageToAppDirectory(con.convertedImage.value!);
+                  }
+                },
+                child: Text("Save Image"),
+              )
+
             ],
           ),
         ),
