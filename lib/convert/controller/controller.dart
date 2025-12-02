@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:converter/convert/ui/image.view.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
@@ -12,6 +14,7 @@ class ImageConverterController extends GetxController {
   Rxn<File> convertedImage = Rxn<File>();
   RxBool loading = false.obs;
   RxBool picking = false.obs;
+  RxList<FileSystemEntity> savedImages = <FileSystemEntity>[].obs;
 
   Future<void> pickImage() async {
     try {
@@ -92,15 +95,63 @@ class ImageConverterController extends GetxController {
     }
   }
 
+  Future<void> fetchSavedImages() async {
+    final dir = await getApplicationDocumentsDirectory();
+    final List<FileSystemEntity> files = dir.listSync();
+
+    savedImages.value = files.where((file) {
+      final ext = p.extension(file.path).toLowerCase();
+      return [".png", ".jpg", ".jpeg", ".webp", ".heic"].contains(ext);
+    }).toList();
+  }
+
+
+
+
   Future<void> saveImageToAppDirectory(File image) async {
-    if (image == null) return;
     try {
       final dir = await getApplicationDocumentsDirectory();
       final newPath = p.join(
         dir.path,
         "saved_image_${DateTime.now().millisecondsSinceEpoch}${p.extension(image.path)}",
       );
-      final savedFile = await image.copy(newPath);
+      await image.copy(newPath);
+      await fetchSavedImages();
     } catch (e) {}
   }
+
+
+
+
+
+  void viewImage(File file) {
+    Get.to(() => ViewImageScreen(imageFile: file));
+  }
+
+
+
+  Future<void> shareSavedImage(File file) async {
+    try {
+      Share.shareXFiles([XFile(file.path)]);
+    } catch (e) {}
+  }
+
+
+  Future<void> deleteSavedImage(File file) async {
+    try {
+      await file.delete();
+      await fetchSavedImages();
+      Get.snackbar("Deleted", "Image removed successfully");
+    } catch (e) {}
+  }
+
+
+  Future<void> openInOtherApp(File file) async {
+    try {
+      await OpenFilex.open(file.path);
+    } catch (e) {
+      print("Error opening file: $e");
+    }
+  }
+
 }
