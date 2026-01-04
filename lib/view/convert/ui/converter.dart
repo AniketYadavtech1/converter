@@ -1,4 +1,4 @@
-import 'package:converter/convert/ui/saveimage.dart';
+import 'package:converter/view/convert/ui/saveimage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controller/controller.dart';
@@ -22,17 +22,17 @@ class ImageConverterScreen extends StatelessWidget {
                   child: Text("Pick Image"),
                 ),
                 SizedBox(height: 20),
-          
+
                 Obx(
-                      () => con.picking.value
+                  () => con.picking.value
                       ? CircularProgressIndicator()
                       : con.selectedImage.value == null
                       ? Text("No image selected")
                       : Image.file(con.selectedImage.value!, height: 200),
                 ),
-          
+
                 SizedBox(height: 20),
-          
+
                 Wrap(
                   spacing: 10,
                   children: [
@@ -42,17 +42,17 @@ class ImageConverterScreen extends StatelessWidget {
                     conversionButton("HEIC"),
                   ],
                 ),
-          
+
                 SizedBox(height: 20),
-          
+
                 Obx(
-                      () => con.loading.value
+                  () => con.loading.value
                       ? CircularProgressIndicator()
                       : con.convertedImage.value == null
                       ? Text("No converted image yet")
                       : Image.file(con.convertedImage.value!, height: 200),
                 ),
-          
+
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: con.convertedImage.value != null
@@ -60,7 +60,7 @@ class ImageConverterScreen extends StatelessWidget {
                       : null,
                   child: Text("Share"),
                 ),
-          
+
                 ElevatedButton(
                   onPressed: () {
                     Get.to(() => SavedImagesScreen());
@@ -74,9 +74,6 @@ class ImageConverterScreen extends StatelessWidget {
                   },
                   child: Text("Save Image"),
                 ),
-
-          
-          
               ],
             ),
           ),

@@ -1,6 +1,10 @@
-import 'package:converter/convert/ui/converter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'view/doc/ui/doc_converter.dart';
+import 'view/home/ui/home_converter.dart';
+
+
+
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +15,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(title: 'Flutter Demo', home: ImageConverterScreen());
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo', home: HomePage());
   }
 }

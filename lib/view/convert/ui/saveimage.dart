@@ -11,12 +11,10 @@ class SavedImagesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    con.fetchSavedImages(); // Load images when screen opens
+    con.fetchSavedImages();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Saved Images"),
-      ),
+      appBar: AppBar(title: Text("Saved Images")),
       body: Obx(() {
         if (con.savedImages.isEmpty) {
           return Center(child: Text("No saved images found"));
@@ -26,7 +24,10 @@ class SavedImagesScreen extends StatelessWidget {
           itemCount: con.savedImages.length,
           itemBuilder: (context, index) {
             final file = con.savedImages[index];
-            final ext = p.extension(file.path).replaceAll('.', '').toUpperCase();
+            final ext = p
+                .extension(file.path)
+                .replaceAll('.', '')
+                .toUpperCase();
 
             return Card(
               margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -56,12 +57,14 @@ class SavedImagesScreen extends StatelessWidget {
                     PopupMenuItem(value: "view", child: Text("View Image")),
                     PopupMenuItem(value: "share", child: Text("Share")),
                     PopupMenuItem(value: "delete", child: Text("Delete")),
-                    PopupMenuItem(value: "openOther", child: Text("Open in Other App")),
+                    PopupMenuItem(
+                      value: "openOther",
+                      child: Text("Open in Other App"),
+                    ),
                   ],
                 ),
               ),
             );
-
           },
         );
       }),

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:converter/convert/ui/image.view.dart';
+import 'package:converter/view/convert/ui/image.view.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -105,9 +105,6 @@ class ImageConverterController extends GetxController {
     }).toList();
   }
 
-
-
-
   Future<void> saveImageToAppDirectory(File image) async {
     try {
       final dir = await getApplicationDocumentsDirectory();
@@ -120,22 +117,15 @@ class ImageConverterController extends GetxController {
     } catch (e) {}
   }
 
-
-
-
-
   void viewImage(File file) {
     Get.to(() => ViewImageScreen(imageFile: file));
   }
-
-
 
   Future<void> shareSavedImage(File file) async {
     try {
       Share.shareXFiles([XFile(file.path)]);
     } catch (e) {}
   }
-
 
   Future<void> deleteSavedImage(File file) async {
     try {
@@ -145,7 +135,6 @@ class ImageConverterController extends GetxController {
     } catch (e) {}
   }
 
-
   Future<void> openInOtherApp(File file) async {
     try {
       await OpenFilex.open(file.path);
@@ -153,5 +142,4 @@ class ImageConverterController extends GetxController {
       print("Error opening file: $e");
     }
   }
-
 }
