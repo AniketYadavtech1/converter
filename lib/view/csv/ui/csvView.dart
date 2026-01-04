@@ -62,7 +62,6 @@ class CsvViewScreen extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     ),
 
-                  /// AFTER PDF CREATED
                   if (controller.generatedPdfFile != null) ...[
                     const SizedBox(height: 10),
 
