@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
@@ -7,24 +6,25 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
 import 'package:xml/xml.dart';
+import 'package:open_filex/open_filex.dart';
 
 class DocxPdfController extends GetxController {
   Rx<File?> selectedDocx = Rx<File?>(null);
   RxList<File> pdfFiles = <File>[].obs;
 
-  /// Pick DOCX
+
   Future<void> pickDocxFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['docx'],
     );
 
-    if (result != null) {
+    if (result != null && result.files.single.path != null) {
       selectedDocx.value = File(result.files.single.path!);
     }
   }
 
-  /// Extract text from DOCX (CORRECT WAY)
+
   Future<String> extractTextFromDocx(File file) async {
     final bytes = await file.readAsBytes();
     final archive = ZipDecoder().decodeBytes(bytes);
@@ -32,28 +32,24 @@ class DocxPdfController extends GetxController {
     final documentFile = archive.files.firstWhere(
           (f) => f.name == 'word/document.xml',
     );
-
     final xmlData =
-    String.fromCharCodes(documentFile.content as Uint8List);
-
+    String.fromCharCodes(documentFile.content);
     final xmlDoc = XmlDocument.parse(xmlData);
-
     final buffer = StringBuffer();
-
-    /// Loop paragraphs
     for (final paragraph in xmlDoc.findAllElements('w:p')) {
       for (final node in paragraph.findAllElements('w:t')) {
         buffer.write(node.text);
       }
-      buffer.writeln(); // new line after paragraph
+      buffer.writeln();
     }
-
     return buffer.toString();
   }
 
-  /// Convert DOCX → PDF (FIXED)
   Future<void> convertToPdf() async {
-    if (selectedDocx.value == null) return;
+    if (selectedDocx.value == null) {
+      Get.snackbar("Error", "Please pick a DOCX file first");
+      return;
+    }
 
     final text = await extractTextFromDocx(selectedDocx.value!);
 
@@ -61,7 +57,7 @@ class DocxPdfController extends GetxController {
 
     pdf.addPage(
       pw.MultiPage(
-        build: (context) => [
+        build: (_) => [
           pw.Text(
             text,
             style: const pw.TextStyle(fontSize: 12),
@@ -69,18 +65,18 @@ class DocxPdfController extends GetxController {
         ],
       ),
     );
-
     final dir = await getApplicationDocumentsDirectory();
     final fileName =
         "docx_${DateTime.now().millisecondsSinceEpoch}.pdf";
-    final file = File('${dir.path}/$fileName');
-
+    final file = File("${dir.path}/$fileName");
     await file.writeAsBytes(await pdf.save());
     pdfFiles.add(file);
+    Get.snackbar("Success", "PDF created successfully");
   }
-
-  /// Share PDF
   Future<void> sharePdf(File file) async {
     await Share.shareXFiles([XFile(file.path)]);
+  }
+  Future<void> openPdf(File file) async {
+    await OpenFilex.open(file.path);
   }
 }

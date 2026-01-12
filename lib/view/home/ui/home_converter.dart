@@ -40,6 +40,12 @@ class _HomePageState extends State<HomePage> {
               },
               child: Text("doc to pdf"),
             ),
+            TextButton(
+              onPressed: () {
+                Get.to(DocxToPdfScreen());
+              },
+              child: Text("docx to pdf"),
+            ),
           ],
         ),
       ),
