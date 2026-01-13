@@ -1,111 +1,78 @@
 import 'dart:io';
+
 import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
 import 'package:xml/xml.dart';
 
-class DocxToPdfController extends GetxController {
+class DocxController extends GetxController {
   Rx<File?> docxFile = Rx<File?>(null);
   Rx<File?> pdfFile = Rx<File?>(null);
+  RxString extractedText = "".obs;
   RxBool isLoading = false.obs;
 
-  /// Pick DOCX
-  Future<void> pickDocxFile() async {
+  Future<void> pickDocx() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['docx'],
     );
 
-    if (result != null && result.files.single.path != null) {
+    if (result != null) {
       docxFile.value = File(result.files.single.path!);
-      pdfFile.value = null;
+      await _extractTextFromDocx();
     }
   }
 
-  /// Extract paragraphs from DOCX
-  Future<List<String>> _extractTextFromDocx(File file) async {
-    final bytes = await file.readAsBytes();
+  Future<void> _extractTextFromDocx() async {
+    isLoading.value = true;
+
+    final bytes = await docxFile.value!.readAsBytes();
     final archive = ZipDecoder().decodeBytes(bytes);
 
-    final paragraphs = <String>[];
-//
-    final docFile =
+    final documentFile =
     archive.files.firstWhere((f) => f.name == 'word/document.xml');
 
-    final xmlString = String.fromCharCodes(docFile.content as List<int>);
-    final document = XmlDocument.parse(xmlString);
+    final xmlDoc = XmlDocument.parse(
+      String.fromCharCodes(documentFile.content),
+    );
 
-    for (final para in document.findAllElements('w:p')) {
-      final buffer = StringBuffer();
-      for (final text in para.findAllElements('w:t')) {
-        buffer.write(text.innerText);
-      }
-      if (buffer.toString().trim().isNotEmpty) {
-        paragraphs.add(buffer.toString());
-      }
+    final buffer = StringBuffer();
+    for (final e in xmlDoc.findAllElements('w:t')) {
+      buffer.write(e.text);
+      buffer.write(' ');
     }
 
-    return paragraphs;
+    extractedText.value = buffer.toString().trim();
+    isLoading.value = false;
   }
 
-  /// Convert DOCX → PDF (SAFE pagination)
-  Future<void> convertDocxToPdf() async {
-    if (docxFile.value == null) {
-      Get.snackbar("Error", "Please select a DOCX file");
+  /// Convert DOCX → PDF
+  Future<void> convertToPdf() async {
+    if (extractedText.value.isEmpty) {
+      Get.snackbar("Error", "No text found in DOCX");
       return;
     }
 
-    try {
-      isLoading.value = true;
+    isLoading.value = true;
 
-      final paragraphs = await _extractTextFromDocx(docxFile.value!);
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        build: (context) => [
+          pw.Text(extractedText.value),
+        ],
+      ),
+    );
 
-      final pdf = pw.Document();
+    final dir = await getApplicationDocumentsDirectory();
+    pdfFile.value = File("${dir.path}/docx_converted.pdf");
 
-      pdf.addPage(
-        pw.MultiPage(
-          pageFormat: PdfPageFormat.a4,
-          margin: const pw.EdgeInsets.all(24),
-          build: (_) => paragraphs
-              .map(
-                (p) => pw.Padding(
-              padding: const pw.EdgeInsets.only(bottom: 8),
-              child: pw.Text(
-                p,
-                style: const pw.TextStyle(fontSize: 12),
-              ),
-            ),
-          )
-              .toList(),
-        ),
-      );
+    await pdfFile.value!.writeAsBytes(await pdf.save());
 
-      final dir = await getApplicationDocumentsDirectory();
-      final file = File(
-        "${dir.path}/docx_${DateTime.now().millisecondsSinceEpoch}.pdf",
-      );
-
-      await file.writeAsBytes(await pdf.save());
-      pdfFile.value = file;
-
-      Get.snackbar("Success", "PDF created successfully");
-    } catch (e) {
-      Get.snackbar("Error", e.toString());
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  /// Open PDF
-  void openPdf() {
-    if (pdfFile.value != null) {
-      OpenFilex.open(pdfFile.value!.path);
-    }
+    isLoading.value = false;
   }
 
   /// Share PDF
@@ -113,10 +80,5 @@ class DocxToPdfController extends GetxController {
     if (pdfFile.value != null) {
       Share.shareXFiles([XFile(pdfFile.value!.path)]);
     }
-  }
-
-  void clearFiles() {
-    docxFile.value = null;
-    pdfFile.value = null;
   }
 }

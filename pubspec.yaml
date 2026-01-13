@@ -50,6 +50,9 @@ dependencies:
   csv: ^6.0.0
   pdf: ^3.11.3
   flutter_pdfview: ^1.4.3
+  archive: ^4.0.7
+  xml: ^6.6.1
+  docx_file_viewer: ^1.0.1
 
 
 

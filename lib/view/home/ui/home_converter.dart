@@ -1,5 +1,6 @@
 import 'package:converter/view/csv/ui/csvView.dart';
 import 'package:converter/view/doctopdf/ui/doctopdfview.dart';
+import 'package:converter/view/docxtopdf/ui/docx_to_pdf_screen.dart';
 import 'package:converter/view/rtf_pdf/ui/rtf_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                Get.to(DocxToPdfScreen());
+                Get.to(DocxScreen());
               },
               child: Text("docx to pdf"),
             ),
