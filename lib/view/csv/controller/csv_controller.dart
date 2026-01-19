@@ -7,7 +7,11 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:open_filex/open_filex.dart';
 import 'package:share_plus/share_plus.dart';
 
+
+
+
 class CsvToPdfController extends GetxController {
+
   File? selectedCsvFile;
   File? generatedPdfFile;
 
@@ -15,58 +19,66 @@ class CsvToPdfController extends GetxController {
   List<List<dynamic>> csvData = [];
 
   Future<void> pickCsvFile() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['csv'],
-    );
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['csv'],
+      );
 
-    if (result != null && result.files.single.path != null) {
-      selectedCsvFile = File(result.files.single.path!);
-      final csvString = await selectedCsvFile!.readAsString();
-      csvData = const CsvToListConverter().convert(csvString);
-      update();
-    }
+      if (result != null && result.files.single.path != null) {
+        selectedCsvFile = File(result.files.single.path!);
+        final csvString = await selectedCsvFile!.readAsString();
+        csvData = const CsvToListConverter().convert(csvString);
+        update();
+      }
+    } catch (e) {}
   }
 
   Future<void> convertCsvToPdf() async {
-    if (csvData.isEmpty) return;
+    try {
+      if (csvData.isEmpty) return;
 
-    isLoading.value = true;
-    update();
+      isLoading.value = true;
+      update();
 
-    final pdf = pw.Document();
-    pdf.addPage(
-      pw.MultiPage(
-        build: (_) => [
-          pw.Text(
-            'CSV to PDF',
-            style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold),
-          ),
-          pw.SizedBox(height: 20),
-          pw.Table.fromTextArray(data: csvData),
-        ],
-      ),
-    );
+      final pdf = pw.Document();
+      pdf.addPage(
+        pw.MultiPage(
+          build: (_) => [
+            pw.Text(
+              '',
+              style: pw.TextStyle(fontSize: 22, fontWeight: pw.FontWeight.bold),
+            ),
+            pw.SizedBox(height: 20),
+            pw.Table.fromTextArray(data: csvData),
+          ],
+        ),
+      );
 
-    final dir = await getApplicationDocumentsDirectory();
-    generatedPdfFile = File('${dir.path}/csv_output.pdf');
-    await generatedPdfFile!.writeAsBytes(await pdf.save());
+      final dir = await getApplicationDocumentsDirectory();
+      generatedPdfFile = File('${dir.path}/csv_output.pdf');
+      await generatedPdfFile!.writeAsBytes(await pdf.save());
 
-    isLoading.value = false;
-    update();
+      isLoading.value = false;
+      update();
+    } catch (e) {}
   }
 
   void openPdfExternal() {
-    if (generatedPdfFile != null) {
-      OpenFilex.open(generatedPdfFile!.path);
-    }
+    try {
+      if (generatedPdfFile != null) {
+        OpenFilex.open(generatedPdfFile!.path);
+      }
+    } catch (e) {}
   }
 
   void sharePdf() {
-    if (generatedPdfFile != null) {
-      Share.shareXFiles([
-        XFile(generatedPdfFile!.path),
-      ], text: "CSV to PDF file");
-    }
+    try {
+      if (generatedPdfFile != null) {
+        Share.shareXFiles([
+          XFile(generatedPdfFile!.path),
+        ], text: "CSV to PDF file");
+      }
+    } catch (e) {}
   }
 }

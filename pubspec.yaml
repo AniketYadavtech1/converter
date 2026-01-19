@@ -53,6 +53,8 @@ dependencies:
   archive: ^4.0.7
   xml: ^6.6.1
   docx_file_viewer: ^1.0.1
+  flutter_svg: ^2.2.3
+  syncfusion_flutter_pdfviewer: ^32.1.23
 
 
 

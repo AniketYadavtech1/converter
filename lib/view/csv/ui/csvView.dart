@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class CsvViewScreen extends StatelessWidget {
   CsvViewScreen({super.key});
 
-  final CsvToPdfController controller = Get.put(CsvToPdfController());
+  final con = Get.put(CsvToPdfController());
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +20,19 @@ class CsvViewScreen extends StatelessWidget {
               return Column(
                 children: [
                   ElevatedButton(
-                    onPressed: controller.pickCsvFile,
+                    onPressed: con.pickCsvFile,
                     child: const Text("Pick CSV"),
                   ),
-/////
-                  if (controller.csvData.isNotEmpty)
+
+                  if (con.csvData.isNotEmpty)
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                          columns: controller.csvData.first
+                          columns: con.csvData.first
                               .map((e) => DataColumn(label: Text(e.toString())))
                               .toList(),
-                          rows: controller.csvData
+                          rows: con.csvData
                               .skip(1)
                               .map(
                                 (row) => DataRow(
@@ -50,27 +50,23 @@ class CsvViewScreen extends StatelessWidget {
                     ),
 
                   ElevatedButton(
-                    onPressed: controller.isLoading.value
-                        ? null
-                        : controller.convertCsvToPdf,
+                    onPressed: con.isLoading.value ? null : con.convertCsvToPdf,
                     child: const Text("Convert to PDF"),
                   ),
 
-                  if (controller.isLoading.value)
+                  if (con.isLoading.value)
                     const Padding(
                       padding: EdgeInsets.all(10),
                       child: CircularProgressIndicator(),
                     ),
 
-                  if (controller.generatedPdfFile != null) ...[
+                  if (con.generatedPdfFile != null) ...[
                     const SizedBox(height: 10),
 
                     ElevatedButton(
                       onPressed: () {
                         Get.to(
-                          () => PdfViewScreen(
-                            pdfFile: controller.generatedPdfFile!,
-                          ),
+                          () => PdfViewScreen(pdfFile: con.generatedPdfFile!),
                         );
                       },
                       child: const Text("View PDF in App"),
@@ -79,13 +75,13 @@ class CsvViewScreen extends StatelessWidget {
                     ElevatedButton.icon(
                       icon: const Icon(Icons.open_in_new),
                       label: const Text("Open in Another App"),
-                      onPressed: controller.openPdfExternal,
+                      onPressed: con.openPdfExternal,
                     ),
 
                     ElevatedButton.icon(
-                      icon: const Icon(Icons.share),
-                      label: const Text("Share PDF"),
-                      onPressed: controller.sharePdf,
+                      icon: Icon(Icons.share),
+                      label: Text("Share PDF"),
+                      onPressed: con.sharePdf,
                     ),
                   ],
                 ],

@@ -37,20 +37,14 @@ class RtfPdfController extends GetxController {
   Future<void> convertToPdf() async {
     if (selectedRtfFile.value == null) return;
 
-    final rtfContent =
-    await selectedRtfFile.value!.readAsString();
+    final rtfContent = await selectedRtfFile.value!.readAsString();
     final text = _rtfToText(rtfContent);
 
     final pdf = pw.Document();
-    pdf.addPage(
-      pw.Page(
-        build: (_) => pw.Text(text),
-      ),
-    );
+    pdf.addPage(pw.Page(build: (_) => pw.Text(text)));
 
     final dir = await getApplicationDocumentsDirectory();
-    final fileName =
-        "rtf_${DateTime.now().millisecondsSinceEpoch}.pdf";
+    final fileName = "rtf_${DateTime.now().millisecondsSinceEpoch}.pdf";
     final file = File('${dir.path}/$fileName');
 
     await file.writeAsBytes(await pdf.save());

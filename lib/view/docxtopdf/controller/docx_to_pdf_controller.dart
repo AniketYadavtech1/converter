@@ -75,7 +75,6 @@ class DocxController extends GetxController {
     isLoading.value = false;
   }
 
-  /// Share PDF
   void sharePdf() {
     if (pdfFile.value != null) {
       Share.shareXFiles([XFile(pdfFile.value!.path)]);
