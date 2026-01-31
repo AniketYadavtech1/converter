@@ -1,6 +1,9 @@
 import 'package:converter/view/csv/ui/csvView.dart';
-import 'package:converter/view/docall/ui/fileview.dart';
+import 'package:converter/view/docxtopdf/component/doc_view.dart';
 import 'package:converter/view/docxtopdf/ui/docx_to_pdf_screen.dart';
+import 'package:converter/view/newreader/ui/home_screen.dart';
+import 'package:converter/view/reader/ui/doc_reader.dart';
+import 'package:converter/view/reader/ui/new_doc.dart';
 import 'package:converter/view/rtf_pdf/ui/rtf_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,10 +46,30 @@ class _HomePageState extends State<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                Get.to(FileManagerScreen());
+                Get.to(WordViewerScreen());
               },
-              child: Text("FileConvert"),
+              child: Text("WordViewerScreen"),
             ),
+            TextButton(
+              onPressed: () {
+                Get.to(DocHomeScreen());
+              },
+              child: Text("Doc Viewer"),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.to(NewHomeScreen());
+              },
+              child: Text("Doc Viewer"),
+            ),
+
+            TextButton(
+              onPressed: () {
+                Get.to(New4HomeScreen());
+              },
+              child: Text("Doc Viewer"),
+            ),
+
           ],
         ),
       ),

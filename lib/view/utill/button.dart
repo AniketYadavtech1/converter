@@ -116,3 +116,154 @@ class AppButton extends StatelessWidget {
     );
   }
 }
+
+//
+//
+// A document converter is a tool/software that converts one file format into another.
+// There are many types, but they are usually grouped by what they convert.
+//
+// 1️⃣ Text / Document Converters
+//
+// Used for office & text files
+//
+// Common types
+//
+// DOC ↔ DOCX
+//
+// DOCX → PDF
+//
+// PDF → DOCX
+//
+// TXT → PDF
+//
+// RTF → DOCX
+//
+// ODT ↔ DOCX
+//
+// HTML → PDF / DOCX
+//
+// Markdown → PDF / HTML
+//
+// Examples
+//
+// Word to PDF
+//
+// PDF to Word
+//
+// Word to HTML
+//
+// 2️⃣ PDF Converters
+//
+// Specially for PDF files
+//
+// Types
+//
+// PDF → Word
+//
+// PDF → Excel
+//
+// PDF → PowerPoint
+//
+// PDF → Image (JPG / PNG)
+//
+// Image → PDF
+//
+// PDF → Text
+//
+// PDF → PDF/A (archival)
+//
+// 3️⃣ Image Converters
+//
+// Convert image formats
+//
+// Types
+//
+// JPG ↔ PNG
+//
+// PNG → WebP
+//
+// HEIC → JPG
+//
+// BMP → PNG
+//
+// TIFF → JPG
+//
+// SVG ↔ PNG/JPG
+//
+// 4️⃣ Spreadsheet Converters
+//
+// For Excel & data files
+//
+// Types
+//
+// XLS ↔ XLSX
+//
+// Excel → PDF
+//
+// CSV ↔ Excel
+//
+// CSV → JSON
+//
+// JSON → Excel
+//
+// XML → CSV
+//
+// 5️⃣ Presentation Converters
+//
+// For slide files
+//
+// Types
+//
+// PPT ↔ PPTX
+//
+// PPTX → PDF
+//
+// PDF → PPTX
+//
+// Google Slides → PPTX
+//
+// 6️⃣ Audio Converters
+//
+// Convert sound files
+//
+// Types
+//
+// MP3 ↔ WAV
+//
+// AAC → MP3
+//
+// M4A → MP3
+//
+// FLAC → MP3
+//
+// OGG → MP3
+//
+// 7️⃣ Video Converters
+//
+// Convert video formats
+//
+// Types
+//
+// MP4 ↔ MKV
+//
+// AVI → MP4
+//
+// MOV → MP4
+//
+// WMV → MP4
+//
+// Video → Audio (MP4 → MP3)
+//
+// 8️⃣ E-book Converters
+//
+// For digital books
+//
+// Types
+//
+// EPUB ↔ PDF
+//
+// MOBI → EPUB
+//
+// AZW → PDF
+//
+// DOCX → EPUB

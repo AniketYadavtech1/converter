@@ -54,7 +54,11 @@ dependencies:
   xml: ^6.6.1
   docx_file_viewer: ^1.0.1
   flutter_svg: ^2.2.3
-  syncfusion_flutter_pdfviewer: ^32.1.23
+  intl: ^0.20.2
+  device_info_plus: ^12.3.0
+  open_file: ^3.5.11
+
+
 
 
 

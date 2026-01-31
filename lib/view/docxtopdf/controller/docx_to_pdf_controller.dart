@@ -9,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:xml/xml.dart';
 
 class DocxController extends GetxController {
+
   Rx<File?> docxFile = Rx<File?>(null);
   Rx<File?> pdfFile = Rx<File?>(null);
   RxString extractedText = "".obs;
