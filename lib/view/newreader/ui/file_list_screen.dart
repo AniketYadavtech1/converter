@@ -186,19 +186,19 @@ class FileListScreen extends StatelessWidget {
             ),
 
             // Files List
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.only(top: 8, bottom: 16),
-                itemCount: controller.files.length,
-                itemBuilder: (context, index) {
-                  final fileInfo = controller.files[index];
-                  return FileItemCard(
-                    fileInfo: fileInfo,
-                    onTap: () => controller.openFile(fileInfo),
-                  );
-                },
-              ),
-            ),
+            // Expanded(
+            //   child: ListView.builder(
+            //     padding: const EdgeInsets.only(top: 8, bottom: 16),
+            //     itemCount: controller.files.length,
+            //     itemBuilder: (context, index) {
+            //       final fileInfo = controller.files[index];
+            //       return FileItemCard(
+            //         fileInfo: fileInfo,
+            //         onTap: () => controller.openFile(fileInfo),
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         );
       }),

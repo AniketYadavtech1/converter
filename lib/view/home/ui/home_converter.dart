@@ -1,3 +1,4 @@
+import 'package:converter/view/compress/ui/image_compress.dart';
 import 'package:converter/view/csv/ui/csvView.dart';
 import 'package:converter/view/docxtopdf/component/doc_view.dart';
 import 'package:converter/view/docxtopdf/ui/docx_to_pdf_screen.dart';
@@ -68,6 +69,12 @@ class _HomePageState extends State<HomePage> {
                 Get.to(New4HomeScreen());
               },
               child: Text("Doc Viewer"),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.to(ImageCompressScreen());
+              },
+              child: Text("Image compress"),
             ),
 
           ],

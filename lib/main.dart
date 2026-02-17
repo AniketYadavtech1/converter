@@ -1,6 +1,6 @@
+import 'package:converter/view/home/ui/home_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'view/home/ui/home_converter.dart';
 import 'view/utill/splace.dart';
 
 
@@ -18,6 +18,6 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
         //push
-        title: '', home: SplashScreen());
+        title: '', home: HomePage());
   }
 }

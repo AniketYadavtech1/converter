@@ -3,7 +3,7 @@ import 'package:converter/view/newreader/model/file_info_model.dart';
 import 'package:converter/view/utill/constants.dart';
 import 'package:converter/view/utill/file_utils.dart';
 import 'package:get/get.dart';
-import 'package:open_file/open_file.dart';
+// import 'package:open_file/open_file.dart';
 
 class FileListController extends GetxController {
   final String fileType;
@@ -114,23 +114,23 @@ class FileListController extends GetxController {
     sortFiles();
   }
 
-  Future<void> openFile(FileInfoModel fileInfo) async {
-    try {
-      final result = await OpenFile.open(fileInfo.path);
-
-      if (result.type != ResultType.done) {
-        Get.snackbar(
-          'Error',
-          'Unable to open file: ${result.message}',
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to open file: $e',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }
-  }
+  // Future<void> openFile(FileInfoModel fileInfo) async {
+  //   try {
+  //     final result = await OpenFile.open(fileInfo.path);
+  //
+  //     if (result.type != ResultType.done) {
+  //       Get.snackbar(
+  //         'Error',
+  //         'Unable to open file: ${result.message}',
+  //         snackPosition: SnackPosition.BOTTOM,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       'Error',
+  //       'Failed to open file: $e',
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+  //   }
+  // }
 }

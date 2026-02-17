@@ -93,3 +93,72 @@ class CsvViewScreen extends StatelessWidget {
     );
   }
 }
+
+
+// Future<void> compressImage() async {
+//   if (originalImage.value == null) return;
+//
+//   final dir = await getTemporaryDirectory();
+//   final targetPath = "${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+//
+//   final result = await FlutterImageCompress.compressAndGetFile(
+//     originalImage.value!.path,
+//     targetPath,
+//     quality: 60, // 🔥 keep between 50–70
+//   );
+//
+//   if (result == null) return;
+//
+//   final originalBytes = await originalImage.value!.length();
+//   final compressedBytes = await result.length();
+//
+//   // 🔥 VERY IMPORTANT CHECK
+//   if (compressedBytes < originalBytes) {
+//     compressedImage.value = File(result.path);
+//
+//     originalSize.value = originalBytes.toDouble();
+//     compressedSize.value = compressedBytes.toDouble();
+//
+//     savedPercentage.value = ((originalBytes - compressedBytes) / originalBytes) * 100;
+//   } else {
+//     // ❌ If compression increased size
+//     compressedImage.value = originalImage.value;
+//     originalSize.value = originalBytes.toDouble();
+//     compressedSize.value = originalBytes.toDouble();
+//     savedPercentage.value = 0;
+//   }
+// }
+
+// Future<void> compressImage() async {
+//   if (originalImage.value == null) return;
+//
+//   final dir = await getTemporaryDirectory();
+//   final targetPath = "${dir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+//
+//   final result = await FlutterImageCompress.compressAndGetFile(
+//     originalImage.value!.path,
+//     targetPath,
+//     quality: 60, // 🔥 keep between 50–70
+//   );
+//
+//   if (result == null) return;
+//
+//   final originalBytes = await originalImage.value!.length();
+//   final compressedBytes = await result.length();
+//
+//   // 🔥 VERY IMPORTANT CHECK
+//   if (compressedBytes < originalBytes) {
+//     compressedImage.value = File(result.path);
+//
+//     originalSize.value = originalBytes.toDouble();
+//     compressedSize.value = compressedBytes.toDouble();
+//
+//     savedPercentage.value = ((originalBytes - compressedBytes) / originalBytes) * 100;
+//   } else {
+//     // ❌ If compression increased size
+//     compressedImage.value = originalImage.value;
+//     originalSize.value = originalBytes.toDouble();
+//     compressedSize.value = originalBytes.toDouble();
+//     savedPercentage.value = 0;
+//   }
+// }
