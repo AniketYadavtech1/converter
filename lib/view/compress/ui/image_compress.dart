@@ -240,3 +240,47 @@ class ImageCompressScreen extends StatelessWidget {
     );
   }
 }
+
+//
+// Future<void> compressImage() async {
+//   if (originalImage.value == null) return;
+//
+//   isLoading.value = true;
+//
+//   final dir = await getTemporaryDirectory();
+//   final targetPath =
+//       "${dir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg";
+//
+//   final result = await FlutterImageCompress.compressAndGetFile(
+//     originalImage.value!.path,
+//     targetPath,
+//     quality: 60,
+//     keepExif: false, // remove metadata
+//   );
+//
+//   if (result != null) {
+//     final File compressedFile = File(result.path);
+//
+//     final int originalBytes = await originalImage.value!.length();
+//     final int compressedBytes = await compressedFile.length();
+//
+//     originalSize.value = originalBytes.toDouble();
+//
+//     // ✅ IMPORTANT CHECK
+//     if (compressedBytes < originalBytes) {
+//       // Use compressed only if smaller
+//       compressedImage.value = compressedFile;
+//       compressedSize.value = compressedBytes.toDouble();
+//
+//       savedPercentage.value =
+//           ((originalBytes - compressedBytes) / originalBytes) * 100;
+//     } else {
+//       // ❌ If compression increases size
+//       compressedImage.value = originalImage.value;
+//       compressedSize.value = originalBytes.toDouble();
+//       savedPercentage.value = 0;
+//     }
+//   }
+//
+//   isLoading.value = false;
+// }
