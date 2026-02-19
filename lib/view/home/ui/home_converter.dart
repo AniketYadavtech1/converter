@@ -76,7 +76,18 @@ class _HomePageState extends State<HomePage> {
               },
               child: Text("Image compress"),
             ),
-
+            TextButton(
+              onPressed: () {
+                Get.to(ImageCompressScreen());
+              },
+              child: Text("Csv file "),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.to(ImageCompressScreen());
+              },
+              child: Text("Gif file "),
+            ),
           ],
         ),
       ),
