@@ -9,6 +9,8 @@ import 'package:converter/view/rtf_pdf/ui/rtf_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../compress/ui/gif_file_compress.dart' show GifScreen;
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -84,7 +86,7 @@ class _HomePageState extends State<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                Get.to(ImageCompressScreen());
+                Get.to(GifScreen());
               },
               child: Text("Gif file "),
             ),

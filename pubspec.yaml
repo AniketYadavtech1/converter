@@ -59,7 +59,9 @@ dependencies:
 #  open_file: ^3.5.11
   image_picker: ^1.2.1
   printing: ^5.14.2
-  image: ^4.2.0
+#  ffmpeg_kit_flutter_new: ^4.1.0
+#  image: 4.2.0
+  image: ^4.5.4
 #  users
 #  simple_pdf_compression: ^0.0.2
 #  file_compression_plus: ^0.0.5
