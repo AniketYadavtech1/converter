@@ -50,9 +50,9 @@ dependencies:
   csv: ^6.0.0
   pdf: ^3.11.3
   flutter_pdfview: ^1.4.3
-  archive: ^4.0.7
+#  archive: ^4.0.7
   xml: ^6.6.1
-  docx_file_viewer: ^1.0.1
+#  docx_file_viewer: ^1.0.1
   flutter_svg: ^2.2.3
   intl: ^0.20.2
   device_info_plus: ^12.3.0
@@ -61,7 +61,8 @@ dependencies:
   printing: ^5.14.2
 #  ffmpeg_kit_flutter_new: ^4.1.0
 #  image: 4.2.0
-  image: ^4.5.4
+#  image: ^4.5.4
+  universal_file_viewer: ^0.1.3
 #  ffmpeg_kit_flutter_new_min_gpl: ^2.1.1
 #  users
 #  simple_pdf_compression: ^0.0.2

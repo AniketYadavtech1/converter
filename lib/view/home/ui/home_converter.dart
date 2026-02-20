@@ -42,30 +42,30 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 10),
 
-            TextButton(
-              onPressed: () {
-                Get.to(DocxScreen());
-              },
-              child: Text("docx to pdf"),
-            ),
-            TextButton(
-              onPressed: () {
-                Get.to(WordViewerScreen());
-              },
-              child: Text("WordViewerScreen"),
-            ),
-            TextButton(
-              onPressed: () {
-                Get.to(DocHomeScreen());
-              },
-              child: Text("Doc Viewer"),
-            ),
-            TextButton(
-              onPressed: () {
-                Get.to(NewHomeScreen());
-              },
-              child: Text("Doc Viewer"),
-            ),
+            // TextButton(
+            //   onPressed: () {
+            //     Get.to(DocxScreen());
+            //   },
+            //   child: Text("docx to pdf"),
+            // ),
+            // TextButton(
+            //   onPressed: () {
+            //     Get.to(WordViewerScreen());
+            //   },
+            //   child: Text("WordViewerScreen"),
+            // ),
+            // TextButton(
+            //   onPressed: () {
+            //     Get.to(DocHomeScreen());
+            //   },
+            //   child: Text("Doc Viewer"),
+            // ),
+            // TextButton(
+            //   onPressed: () {
+            //     Get.to(NewHomeScreen());
+            //   },
+            //   child: Text("Doc Viewer"),
+            // ),
 
             TextButton(
               onPressed: () {
