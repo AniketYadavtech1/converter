@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:ffmpeg_kit_flutter_new_min_gpl/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter_new_min_gpl/return_code.dart';
+// import 'package:ffmpeg_kit_flutter_new_min_gpl/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_flutter_new_min_gpl/return_code.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
@@ -23,149 +24,89 @@ class GifController extends GetxController {
   Future<void> pickGif() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['gif']);
-
       if (result == null) return;
-
-      File file = File(result.files.single.path!);
-
+      File file = File(result.toString());
       originalGif.value = file;
       originalSize.value = await _getFileSize(file);
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      print("Error${e}");
     }
   }
 
   /// COMPRESS GIF
+  Future<void> compressGif() async {
+    if (originalGif.value == null) return;
+    isLoading.value = true;
+    final dir = await getTemporaryDirectory();
+    final targetPath = "${dir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.gif";
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File("${dir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.gif");
+      final result = await FlutterImageCompress.compressAndGetFile(originalGif.value!.path, targetPath, quality: 60);
+      if (result == null) {
+        compressedGif.value = File(result!.path);
+      }
+      print("OriginalSize${compressedGif.value}");
+      compressedGif.value = file;
+      compressedSize.value = await _getFileSize(file);
+      Get.snackbar("Success", "GIF Compressed Successfully");
+    } catch (e) {
+      print("Error ${e}");
+      // Get.snackbar("Error", e.toString());
+    }
+
+    isLoading.value = false;
+  }
+
   // Future<void> compressGif() async {
   //   if (originalGif.value == null) return;
   //
   //   isLoading.value = true;
   //
   //   try {
-  //     Uint8List bytes = await originalGif.value!.readAsBytes();
-  //
-  //     final decoder = img.GifDecoder();
-  //     final animation = decoder.decode(bytes);
-  //
-  //     if (animation == null || animation.frames.isEmpty) {
-  //       Get.snackbar("Error", "Invalid GIF");
-  //       isLoading.value = false;
-  //       return;
-  //     }
-  //
-  //     final encoder = img.GifEncoder()
-  //       ..repeat = animation.loopCount;
-  //
-  //     img.Image? previousFrame;
-  //
-  //     for (final frame in animation.frames) {
-  //       img.Image fullFrame;
-  //
-  //       // 🔹 Rebuild full frame correctly
-  //       if (previousFrame == null) {
-  //         fullFrame = frame.clone();
-  //       } else {
-  //         fullFrame = previousFrame.clone();
-  //         img.compositeImage(fullFrame, frame);
-  //       }
-  //
-  //       previousFrame = fullFrame.clone();
-  //
-  //       // 🔹 Resize (mild resize for better smoothness)
-  //       img.Image resized = img.copyResize(
-  //         fullFrame,
-  //         width: (fullFrame.width * 0.85).toInt(),
-  //         interpolation: img.Interpolation.linear,
-  //       );
-  //
-  //       // 🔹 Reduce colors (important for smooth compression)
-  //       img.Image reduced = img.quantize(
-  //         resized,
-  //         numberOfColors: 128, // 128 = smooth + smaller
-  //         method: img.QuantizeMethod.octree,
-  //       );
-  //
-  //       int duration = frame.frameDuration;
-  //       if (duration <= 0) duration = 100;
-  //
-  //       encoder.addFrame(reduced, duration: duration);
-  //     }
-  //
-  //     final compressedBytes = encoder.finish();
-  //
-  //     if (compressedBytes == null) {
-  //       Get.snackbar("Error", "Compression failed");
-  //       isLoading.value = false;
-  //       return;
-  //     }
+  //     final inputPath = originalGif.value!.path;
   //
   //     final dir = await getApplicationDocumentsDirectory();
-  //     final file = File(
-  //       "${dir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.gif",
-  //     );
+  //     final palettePath = "${dir.path}/palette.png";
+  //     final outputPath = "${dir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.gif";
   //
-  //     await file.writeAsBytes(compressedBytes, flush: true);
+  //     // 🔹 STEP 1 — Generate optimized palette
+  //     final paletteCommand =
+  //         '-i "$inputPath" '
+  //         '-vf "palettegen" '
+  //         '"$palettePath"';
   //
-  //     compressedGif.value = file;
-  //     compressedSize.value = await _getFileSize(file);
+  //     await FFmpegKit.execute(paletteCommand);
   //
-  //     Get.snackbar("Success", "GIF Compressed Successfully");
+  //     // 🔹 STEP 2 — Create compressed GIF using palette
+  //     final gifCommand =
+  //         '-i "$inputPath" '
+  //         '-i "$palettePath" '
+  //         '-lavfi "paletteuse" '
+  //         '-loop 0 '
+  //         '"$outputPath"';
+  //
+  //     await FFmpegKit.execute(gifCommand).then((session) async {
+  //       final returnCode = await session.getReturnCode();
+  //
+  //       if (ReturnCode.isSuccess(returnCode)) {
+  //         final file = File(outputPath);
+  //
+  //         compressedGif.value = file;
+  //         compressedSize.value = await _getFileSize(file);
+  //
+  //         Get.snackbar("Success", "Animated GIF Compressed Successfully");
+  //       } else {
+  //         Get.snackbar("Error", "Compression Failed");
+  //       }
+  //     });
   //   } catch (e) {
   //     Get.snackbar("Error", e.toString());
+  //     print("DownloadImage ${e}");
   //   }
   //
   //   isLoading.value = false;
   // }
-
-  Future<void> compressGif() async {
-    if (originalGif.value == null) return;
-
-    isLoading.value = true;
-
-    try {
-      final inputPath = originalGif.value!.path;
-
-      final dir = await getApplicationDocumentsDirectory();
-      final palettePath = "${dir.path}/palette.png";
-      final outputPath = "${dir.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.gif";
-
-      // 🔹 STEP 1 — Generate optimized palette
-      final paletteCommand =
-          '-i "$inputPath" '
-          '-vf "palettegen" '
-          '"$palettePath"';
-
-      await FFmpegKit.execute(paletteCommand);
-
-      // 🔹 STEP 2 — Create compressed GIF using palette
-      final gifCommand =
-          '-i "$inputPath" '
-          '-i "$palettePath" '
-          '-lavfi "paletteuse" '
-          '-loop 0 '
-          '"$outputPath"';
-
-      await FFmpegKit.execute(gifCommand).then((session) async {
-        final returnCode = await session.getReturnCode();
-
-        if (ReturnCode.isSuccess(returnCode)) {
-          final file = File(outputPath);
-
-          compressedGif.value = file;
-          compressedSize.value = await _getFileSize(file);
-
-          Get.snackbar("Success", "Animated GIF Compressed Successfully");
-        } else {
-          Get.snackbar("Error", "Compression Failed");
-        }
-      });
-    } catch (e) {
-      Get.snackbar("Error", e.toString());
-      print("DownloadImage ${e}");
-    }
-
-    isLoading.value = false;
-  }
 
   Future<void> saveToDownloads() async {
     if (compressedGif.value == null) return;

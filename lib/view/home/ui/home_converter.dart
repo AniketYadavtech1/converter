@@ -1,3 +1,4 @@
+import 'package:converter/view/compress/ui/docx.dart';
 import 'package:converter/view/compress/ui/image_compress.dart';
 import 'package:converter/view/csv/ui/csvView.dart';
 import 'package:converter/view/docxtopdf/component/doc_view.dart';
@@ -89,6 +90,12 @@ class _HomePageState extends State<HomePage> {
                 Get.to(GifScreen());
               },
               child: Text("Gif file "),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.to(DocxCompressionScreen());
+              },
+              child: Text("docx compress"),
             ),
           ],
         ),
