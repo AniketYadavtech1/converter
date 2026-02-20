@@ -4,7 +4,7 @@ import 'package:converter/view/convert/ui/image.view.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:open_filex/open_filex.dart';
+// import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:share_plus/share_plus.dart';
@@ -135,11 +135,11 @@ class ImageConverterController extends GetxController {
     } catch (e) {}
   }
 
-  Future<void> openInOtherApp(File file) async {
-    try {
-      await OpenFilex.open(file.path);
-    } catch (e) {
-      print("Error opening file: $e");
-    }
-  }
+  // Future<void> openInOtherApp(File file) async {
+  //   try {
+  //     await OpenFilex.open(file.path);
+  //   } catch (e) {
+  //     print("Error opening file: $e");
+  //   }
+  // }
 }

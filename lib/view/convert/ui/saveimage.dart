@@ -49,9 +49,10 @@ class SavedImagesScreen extends StatelessWidget {
                       con.shareSavedImage(File(file.path));
                     } else if (value == "delete") {
                       con.deleteSavedImage(File(file.path));
-                    } else if (value == "openOther") {
-                      con.openInOtherApp(File(file.path));
                     }
+                    // } else if (value == "openOther") {
+                    //   con.openInOtherApp(File(file.path));
+                    // }
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(value: "view", child: Text("View Image")),

@@ -72,11 +72,11 @@ class CsvViewScreen extends StatelessWidget {
                       child: const Text("View PDF in App"),
                     ),
 
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.open_in_new),
-                      label: const Text("Open in Another App"),
-                      onPressed: con.openPdfExternal,
-                    ),
+                    // ElevatedButton.icon(
+                    //   icon: const Icon(Icons.open_in_new),
+                    //   label: const Text("Open in Another App"),
+                    //   onPressed: con.openPdfExternal,
+                    // ),
 
                     ElevatedButton.icon(
                       icon: Icon(Icons.share),

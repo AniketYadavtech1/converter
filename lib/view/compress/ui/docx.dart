@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:universal_file_viewer/universal_file_viewer.dart' hide FileType;
 
+
 class DocxController extends GetxController {
   Rx<File?> originalFile = Rx<File?>(null);
   Rx<File?> compressedFile = Rx<File?>(null);
@@ -144,12 +145,13 @@ class DocxCompressionScreen extends StatelessWidget {
                   controller.originalSize.value,
                   Colors.blue,
                 ),
-              // SizedBox(
-              //   height: 400,
-              //   child: UniversalFileViewer(
-              //     file: controller.originalFile.value!.path,
-              //   ),
-              // ),
+              if (controller.originalFile.value != null)
+                SizedBox(
+                  height: 400,
+                  child: UniversalFileViewer(
+                    file: controller.originalFile.value!,
+                  ),
+                ),
               const SizedBox(height: 20),
 
               if (controller.originalFile.value != null)
