@@ -2,11 +2,12 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:universal_file_viewer/universal_file_viewer.dart' hide FileType;
+// import 'package:universal_file_viewer/universal_file_viewer.dart' hide FileType;
 
 
 class DocxController extends GetxController {
@@ -120,93 +121,214 @@ class DocxController extends GetxController {
   }
 }
 
-class DocxCompressionScreen extends StatelessWidget {
-  DocxCompressionScreen({super.key});
+class DocxCompressionScreen extends StatefulWidget {
+  const DocxCompressionScreen({super.key});
 
+  @override
+  State<DocxCompressionScreen> createState() =>
+      _DocxCompressionScreenState();
+}
+
+class _DocxCompressionScreenState
+    extends State<DocxCompressionScreen> {
   final controller = Get.put(DocxController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("DOCX Compressor"), centerTitle: true),
+      backgroundColor: Colors.grey.shade100,
+      appBar: AppBar(
+        title: const Text("DOCX Compressor"),
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: Obx(
-        () => SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              ElevatedButton(onPressed: controller.pickDocx, child: const Text("Pick DOCX File")),
+            () => LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: 40.w,
+                vertical: 30.h,
+              ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1000),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
 
-              const SizedBox(height: 20),
+                      /// PICK BUTTON
+                      ElevatedButton.icon(
+                        icon: const Icon(Icons.upload_file),
+                        label: const Text("Pick DOCX File"),
+                        onPressed: controller.pickDocx,
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 30.w, vertical: 15.h),
+                        ),
+                      ),
 
-              if (controller.originalFile.value != null)
-                _infoCard(
-                  "Original File",
-                  controller.originalFile.value!.path.split('/').last,
-                  controller.originalSize.value,
-                  Colors.blue,
-                ),
-              if (controller.originalFile.value != null)
-                SizedBox(
-                  height: 400,
-                  child: UniversalFileViewer(
-                    file: controller.originalFile.value!,
+                      SizedBox(height: 30.h),
+
+                      /// ORIGINAL FILE CARD
+                      if (controller.originalFile.value != null)
+                        _fileCard(
+                          title: "Original File",
+                          fileName: controller.originalFile.value!.path
+                              .split('/')
+                              .last,
+                          size: controller.originalSize.value,
+                          color: Colors.blue,
+                        ),
+
+                      SizedBox(height: 20.h),
+
+                      /// FILE PREVIEW
+                      if (controller.originalFile.value != null)
+                        Container(
+                          height: 400.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                                color: Colors.grey.shade300),
+                            color: Colors.white,
+                          ),
+                          // child: ClipRRect(
+                          //   borderRadius: BorderRadius.circular(16),
+                          //   child: UniversalFileViewer(
+                          //     file: controller.originalFile.value!,
+                          //   ),
+                          // ),
+                        ),
+
+                      SizedBox(height: 25.h),
+
+                      /// COMPRESS BUTTON
+                      if (controller.originalFile.value != null)
+                        ElevatedButton.icon(
+                          icon: const Icon(Icons.compress),
+                          label: const Text("Compress File"),
+                          onPressed: controller.compressDocx,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30.w,
+                                vertical: 15.h),
+                          ),
+                        ),
+
+                      SizedBox(height: 25.h),
+
+                      /// LOADING
+                      if (controller.isLoading.value)
+                        Column(
+                          children: [
+                            const CircularProgressIndicator(),
+                            SizedBox(height: 10.h),
+                            const Text("Compressing... Please wait"),
+                          ],
+                        ),
+
+                      SizedBox(height: 30.h),
+
+                      /// COMPRESSED FILE CARD
+                      if (controller.compressedFile.value != null)
+                        _fileCard(
+                          title: "Compressed File",
+                          fileName: controller
+                              .compressedFile.value!.path
+                              .split('/')
+                              .last,
+                          size: controller.compressedSize.value,
+                          color: Colors.green,
+                        ),
+
+                      SizedBox(height: 15.h),
+
+                      /// SAVED PERCENTAGE
+                      if (controller.compressedFile.value != null)
+                        Container(
+                          padding: EdgeInsets.all(16.w),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius:
+                            BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            "You saved ${controller.calculateSavedPercentage()} %",
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ),
+
+                      SizedBox(height: 25.h),
+
+                      /// DOWNLOAD BUTTON
+                      if (controller.compressedFile.value != null)
+                        ElevatedButton.icon(
+                          icon: const Icon(Icons.download),
+                          label: const Text(
+                              "Download Compressed File"),
+                          onPressed: controller.saveToDownloads,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 30.w,
+                                vertical: 15.h),
+                          ),
+                        ),
+
+                      SizedBox(height: 40.h),
+                    ],
                   ),
                 ),
-              const SizedBox(height: 20),
-
-              if (controller.originalFile.value != null)
-                ElevatedButton(onPressed: controller.compressDocx, child: const Text("Compress File")),
-
-              const SizedBox(height: 20),
-
-              if (controller.isLoading.value) const CircularProgressIndicator(),
-
-              const SizedBox(height: 20),
-
-              if (controller.compressedFile.value != null)
-                _infoCard(
-                  "Compressed File",
-                  controller.compressedFile.value!.path.split('/').last,
-                  controller.compressedSize.value,
-                  Colors.green,
-                ),
-
-              const SizedBox(height: 10),
-
-              if (controller.compressedFile.value != null)
-                Text(
-                  "You saved ${controller.calculateSavedPercentage()} %",
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
-                ),
-
-              const SizedBox(height: 20),
-
-              if (controller.compressedFile.value != null)
-                ElevatedButton(onPressed: controller.saveToDownloads, child: const Text("Download Compressed File")),
-            ],
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _infoCard(String title, String fileName, String size, Color color) {
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: color),
+  Widget _fileCard({
+    required String title,
+    required String fileName,
+    required String size,
+    required Color color,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+              color: color,
             ),
-            const SizedBox(height: 8),
-            Text("Name: $fileName"),
-            Text("Size: $size"),
-          ],
-        ),
+          ),
+          SizedBox(height: 10.h),
+          Text("Name: $fileName"),
+          Text("Size: $size"),
+        ],
       ),
     );
   }
